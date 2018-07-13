@@ -13,7 +13,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <serenity.version>1.9.25</serenity.version>
         <serenity.cucumber.version>1.9.9</serenity.cucumber.version>
-        <webdriver.driver>chrome</webdriver.driver>
+        <threads>4</threads>
     </properties>
 
     <repositories>
@@ -75,15 +75,11 @@
             </plugin>
             <plugin>
                 <artifactId>maven-failsafe-plugin</artifactId>
-                <version>2.19.1</version>
+                <version>2.20</version>
                 <configuration>
-                    <includes>
-                        <include>**/*.java</include>
-                    </includes>
-                    <argLine>-Xmx512m</argLine>
-                    <systemPropertyVariables>
-                        <webdriver.driver>${webdriver.driver}</webdriver.driver>
-                    </systemPropertyVariables>
+                    <parallel>classes</parallel>
+                    <threadCount>${threads}</threadCount>
+                    <perCoreThreadCount>false</perCoreThreadCount>
                 </configuration>
                 <executions>
                     <execution>
@@ -114,6 +110,32 @@
                         <goals>
                             <goal>aggregate</goal>
                         </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>com.github.temyers</groupId>
+                <artifactId>cucumber-jvm-parallel-plugin</artifactId>
+                <version>4.2.0</version>
+                <executions>
+                    <execution>
+                        <id>generateRunners</id>
+                        <phase>generate-test-sources</phase>
+                        <goals>
+                            <goal>generateRunners</goal>
+                        </goals>
+                        <configuration>
+                            <!-- Mandatory -->
+                            <!-- List of package names to scan for glue code. -->
+
+                            <glue>
+                                <package>benefextest.cucumber</package>
+                            </glue>
+                            <namingScheme>feature-title</namingScheme>
+                            <parallelScheme>FEATURE</parallelScheme>
+                            <customVmTemplate>src/test/resources/cucumber-serenity-runner.vm</customVmTemplate>
+                            <featuresDirectory>src/test/resources/features</featuresDirectory>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
