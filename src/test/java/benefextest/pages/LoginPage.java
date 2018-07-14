@@ -19,7 +19,7 @@ public class LoginPage extends PageObject {
     public void loginEmployee(Employee employee){
         usernameInput.waitUntilVisible();
         usernameInput.type(employee.getUsername());
-        usernameInput.type(employee.getPassword());
+        passwordInput.type(employee.getPassword());
         signInButton.click();
     }
 }

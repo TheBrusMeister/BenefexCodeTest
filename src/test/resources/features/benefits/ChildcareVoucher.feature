@@ -5,3 +5,4 @@ Feature: Childcare voucher increase monthly payment
 
   Scenario: Increase childcare voucher benefit monthly payment
     Given I am a logged in employee
+    When I increase my existing childcare benefit monthly payment
